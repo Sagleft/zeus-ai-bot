@@ -134,9 +134,13 @@ func (app *solution) onWsConnected() {
 }
 
 func (app *solution) onWsEvent(event utopiago.WsEvent) {
-	if event.Type == "" {
-		// TODO
+	messageHandler, isHandlerExists := app.WsHandlers[event.Type]
+	if !isHandlerExists {
+		return // ignore unknown event
 	}
+
+	// process event
+	messageHandler(event)
 }
 
 func (app *solution) onWsError(err error) {
