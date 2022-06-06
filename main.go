@@ -54,7 +54,10 @@ func (app *solution) onNewAuth(event utopiago.WsEvent) {
 }
 
 func (app *solution) sendReply(pubkey, message string) error {
-	// TODO
+	_, err := app.Bot.SendInstantMessage(pubkey, message)
+	if err != nil {
+		return errors.New("failed to send reply: " + err.Error())
+	}
 	return nil
 }
 
