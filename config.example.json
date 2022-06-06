@@ -1,0 +1,13 @@
+{
+    "utopia": {
+        "protocol": "http",
+        "token": "enter your token",
+        "host": "127.0.0.1",
+        "port": 20000,
+        "wsport": 25000
+    },
+    "enable_ws_ssl": false,
+    "openai_token": "enter your token",
+    "openai_engine": "text-davinci-002",
+    "max_tokens": 500
+}
