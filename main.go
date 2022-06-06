@@ -14,10 +14,32 @@ type solution struct {
 	Config config
 	Bot    *utopiago.UtopiaClient
 	OpenAI gpt3.Client
+
+	WsHandlers map[string]wsHandler
 }
 
+type wsHandler func(event utopiago.WsEvent)
+
 func newSolution() solution {
-	return solution{}
+	app := solution{}
+	app.WsHandlers = map[string]wsHandler{
+		"newAuthorization":           app.onNewAuth,
+		"contactCreatedNotification": app.onContactCreated,
+		"newInstantMessage":          app.onUserMessage,
+	}
+	return app
+}
+
+func (app *solution) onNewAuth(event utopiago.WsEvent) {
+	// TODO
+}
+
+func (app *solution) onContactCreated(event utopiago.WsEvent) {
+	// TODO
+}
+
+func (app *solution) onUserMessage(event utopiago.WsEvent) {
+	// TODO
 }
 
 type config struct {
