@@ -58,6 +58,13 @@ func (app *solution) runBot() error {
 	return nil
 }
 
+func (app *solution) runInBackground() error {
+	ch := make(chan struct{})
+	// background
+	<-ch
+	return nil
+}
+
 func main() {
 	app := newSolution()
 
@@ -66,6 +73,7 @@ func main() {
 		app.setupOpenAIClient,
 		app.utopiaConnect,
 		app.runBot,
+		app.runInBackground,
 	)
 	if err != nil {
 		log.Fatalln(err)
