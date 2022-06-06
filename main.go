@@ -8,8 +8,8 @@ import (
 	utopiago "github.com/Sagleft/utopialib-go"
 )
 
-func newSolution() solution {
-	app := solution{}
+func newSolution() *solution {
+	app := &solution{}
 	app.WsHandlers = map[string]wsHandler{
 		"newAuthorization":  app.onNewAuth,
 		"newInstantMessage": app.onUserMessage,
@@ -59,6 +59,8 @@ func (app *solution) runBot() error {
 }
 
 func (app *solution) runInBackground() error {
+	printSuccess("bot started")
+
 	ch := make(chan struct{})
 	// background
 	<-ch

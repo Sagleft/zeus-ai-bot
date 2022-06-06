@@ -28,10 +28,13 @@ func (app *solution) handleUserRequest(request string) (string, error) {
 
 	dataArray := []string{}
 	for _, data := range response.Choices {
-		dataArray = append(dataArray, data.Text)
+		if data.Text != "" {
+			dataArray = append(dataArray, data.Text)
+		}
 	}
 
-	return strings.Join(dataArray, "\n"), nil
+	result := strings.Join(dataArray, "\n")
+	return strings.TrimLeft(result, "\n"), nil
 }
 
 func (app *solution) onNewAuth(event utopiago.WsEvent) {
