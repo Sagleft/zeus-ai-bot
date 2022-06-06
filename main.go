@@ -23,9 +23,8 @@ type wsHandler func(event utopiago.WsEvent)
 func newSolution() solution {
 	app := solution{}
 	app.WsHandlers = map[string]wsHandler{
-		"newAuthorization":           app.onNewAuth,
-		"contactCreatedNotification": app.onContactCreated,
-		"newInstantMessage":          app.onUserMessage,
+		"newAuthorization":  app.onNewAuth,
+		"newInstantMessage": app.onUserMessage,
 	}
 	return app
 }
@@ -52,10 +51,6 @@ func (app *solution) onNewAuth(event utopiago.WsEvent) {
 			app.onWsError(errors.New("failed to send PM: " + err.Error()))
 		}
 	}
-}
-
-func (app *solution) onContactCreated(event utopiago.WsEvent) {
-	// TODO
 }
 
 func (app *solution) onUserMessage(event utopiago.WsEvent) {
