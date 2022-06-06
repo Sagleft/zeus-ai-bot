@@ -53,8 +53,57 @@ func (app *solution) onNewAuth(event utopiago.WsEvent) {
 	}
 }
 
-func (app *solution) onUserMessage(event utopiago.WsEvent) {
+func (app *solution) sendReply(pubkey, message string) error {
 	// TODO
+	return nil
+}
+
+func (app *solution) onUserMessage(event utopiago.WsEvent) {
+	// check message
+	isMessageIncoming, err := event.GetBool("isIncoming")
+	if err != nil {
+		app.onWsError(err)
+		return
+	}
+	if !isMessageIncoming {
+		return
+	}
+
+	// get message text
+	messageText, err := event.GetString("text")
+	if err != nil {
+		app.onWsError(err)
+		return
+	}
+	if messageText == "" {
+		return // ignore empty message
+	}
+
+	// get user pubkey from message
+	userPubkey, err := event.GetString("pk")
+	if err != nil {
+		app.onWsError(err)
+		return
+	}
+	if len(messageText) < minMessageLength {
+		err := app.sendReply(userPubkey, "The message is too short. Formulate your request in as much detail as possible")
+		if err != nil {
+			app.onWsError(err)
+			return
+		}
+	}
+
+	// process request
+	botResponse, err := app.handleUserRequest(messageText)
+	if err != nil {
+		app.onWsError(err)
+		return
+	}
+	// send response to user
+	err = app.sendReply(userPubkey, botResponse)
+	if err != nil {
+		app.onWsError(err)
+	}
 }
 
 type config struct {
