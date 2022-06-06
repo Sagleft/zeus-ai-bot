@@ -31,7 +31,27 @@ func newSolution() solution {
 }
 
 func (app *solution) onNewAuth(event utopiago.WsEvent) {
-	// TODO
+	// get pubkey
+	userPubkey, err := event.GetString("pk")
+	if err != nil {
+		app.onWsError(err)
+		return
+	}
+
+	// approve auth
+	_, err = app.Config.Utopia.AcceptAuthRequest(userPubkey, "")
+	if err != nil {
+		app.onWsError(errors.New("failed to accept auth: " + err.Error()))
+		return
+	}
+
+	print("user " + userPubkey + " auth accepted")
+	if welcomeMessage != "" {
+		_, err = app.Config.Utopia.SendInstantMessage(userPubkey, welcomeMessage)
+		if err != nil {
+			app.onWsError(errors.New("failed to send PM: " + err.Error()))
+		}
+	}
 }
 
 func (app *solution) onContactCreated(event utopiago.WsEvent) {
